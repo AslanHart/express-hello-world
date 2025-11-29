@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Root route: shows a simple HTML page
+// Root route
 const html = `
   <section>
     <h1>Harts Hearth - Webhook is live!</h1>
@@ -14,8 +14,18 @@ app.get("/", (req, res) => {
   res.type("html").send(html);
 });
 
-// Twilio webhook route
+// Twilio webhook route (POST)
 app.post("/elevenlabs-agent-handler", (req, res) => {
+  res.type("text/xml");
+  res.send(`
+    <Response>
+      <Say>Connecting you to Hart's Hearth AI Agent...</Say>
+    </Response>
+  `);
+});
+
+// Optional GET route for browser testing
+app.get("/elevenlabs-agent-handler", (req, res) => {
   res.type("text/xml");
   res.send(`
     <Response>
@@ -29,9 +39,5 @@ const server = app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
 });
 
-// Keep-alive settings
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
-  </body>
-</html>
-`
